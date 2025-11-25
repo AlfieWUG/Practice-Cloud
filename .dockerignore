@@ -1,0 +1,9 @@
+agentic-services-env/
+__pycache__/
+*.pyc
+.git/
+.DS_Store
+logs/
+data/
+.env
+*.log

@@ -1,0 +1,49 @@
+Build a microservices-based e-commerce platform
+
+Core Features:
+- Product catalog with search and filtering
+- Shopping cart functionality
+- User authentication and profiles
+- Order processing and payment integration
+- Inventory management
+- Admin dashboard
+
+Technical Requirements:
+- Microservices architecture
+- API Gateway pattern
+- Event-driven communication between services
+- Docker containerization
+- Kubernetes orchestration
+- PostgreSQL for product data
+- MongoDB for user sessions
+- Redis for caching
+- RabbitMQ or Kafka for messaging
+
+Services to build:
+1. Product Service - manage product catalog
+2. Cart Service - shopping cart operations
+3. Order Service - order processing
+4. User Service - authentication and profiles
+5. Payment Service - payment gateway integration
+6. Notification Service - email/SMS notifications
+
+Non-functional Requirements:
+- High availability (99.9% uptime)
+- Horizontal scalability
+- Response time < 500ms
+- Support 10,000 concurrent users
+- GDPR compliance
+- PCI DSS compliance for payments
+
+Technology Stack:
+- Backend: Python (FastAPI) or Node.js (Express)
+- Frontend: React.js (separate project)
+- API: RESTful + GraphQL
+- Authentication: OAuth 2.0 + JWT
+- Monitoring: Prometheus + Grafana
+- Logging: ELK Stack
+- CI/CD: GitLab CI or Jenkins
+
+Timeline: 3 months MVP
+Team: 5 developers
+Budget: Medium to high
