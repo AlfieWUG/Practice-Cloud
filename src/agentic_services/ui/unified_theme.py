@@ -32,11 +32,76 @@ def apply_unified_theme():
     
     /* Main content area */
     .main .block-container {
-        padding-top: 2rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-        max-width: 100%;
+        padding-top: 2rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        padding-bottom: 2rem !important;
+        max-width: 100% !important;
         background: var(--nagarro-navy) !important;
+    }
+    
+    /* Normalize base font size for consistency */
+    html {
+        font-size: 16px !important;
+    }
+    
+    body {
+        font-size: 16px !important;
+    }
+    
+    /* Ensure consistent hero section sizing */
+    .main .block-container h1 {
+        font-size: 3rem !important;
+        line-height: 1.2 !important;
+        margin: 0 0 1rem 0 !important;
+    }
+    
+    .main .block-container h2 {
+        font-size: 1.8rem !important;
+        line-height: 1.3 !important;
+    }
+    
+    .main .block-container h3 {
+        font-size: 1.5rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    .main .block-container p {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Hero section specific styling for consistency */
+    .main .block-container div[style*="background: linear-gradient(135deg, #1A1F3A"] h1 {
+        font-size: 3rem !important;
+        font-weight: 900 !important;
+        margin: 0 0 1rem 0 !important;
+        line-height: 1.2 !important;
+    }
+    
+    .main .block-container div[style*="background: linear-gradient(135deg, #1A1F3A"] p {
+        font-size: 1.3rem !important;
+        line-height: 1.8 !important;
+        margin: 0 0 1.5rem 0 !important;
+    }
+    
+    /* Ensure consistent padding and spacing */
+    .main .block-container > div {
+        max-width: 100% !important;
+    }
+    
+    /* Normalize container widths for consistency */
+    .stApp > div:first-child {
+        max-width: 100% !important;
+    }
+    
+    /* Ensure consistent spacing between elements */
+    .main .block-container > * {
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .main .block-container > *:last-child {
+        margin-bottom: 0 !important;
     }
     
     /* ============================================
