@@ -2,16 +2,18 @@
 Nagarro Agentic Services - Main Dashboard
 Uses unified theme and navigation for consistency
 """
-import streamlit as st
 import os
 import sys
+import streamlit as st
 from dotenv import load_dotenv
+
+# Add src to path before importing internal packages
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+
+from agentic_services.security.demo_gate import enforce_demo_passcode
 
 # Load environment variables
 load_dotenv()
-
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 # Page configuration
 st.set_page_config(
@@ -21,10 +23,24 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Authentication - DISABLED FOR TESTING
-# from agentic_services.auth import DashboardAuth
-# auth = DashboardAuth()
-# auth.require_auth()
+# Demo passcode gate (optional, enabled when DEMO_PASSCODE is defined)
+enforce_demo_passcode()
+
+# Authentication (enabled by default for shared demos)
+# Check environment variable first, then Streamlit secrets
+enable_auth_env = os.getenv("ENABLE_DASHBOARD_AUTH", "")
+if not enable_auth_env:
+    try:
+        if hasattr(st, "secrets"):
+            enable_auth_env = st.secrets.get("ENABLE_DASHBOARD_AUTH", "true")
+    except (RuntimeError, AttributeError, KeyError):
+        enable_auth_env = "true"  # Default to enabled
+
+ENABLE_DASHBOARD_AUTH = enable_auth_env.lower() == "true"
+if ENABLE_DASHBOARD_AUTH:
+    from agentic_services.auth import DashboardAuth
+
+    DashboardAuth().require_auth()
 
 # Initialize session state
 if 'current_page' not in st.session_state:

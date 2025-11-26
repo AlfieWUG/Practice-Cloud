@@ -22,14 +22,24 @@ class DashboardAuth:
         return hashlib.sha256(password.encode()).hexdigest()
     
     def _get_credentials_local(self) -> Dict[str, str]:
-        """Get credentials from environment variables (local dev)"""
+        """Get credentials from environment variables or Streamlit secrets (local dev / Streamlit Cloud)"""
+        # Try environment variables first
         username = os.getenv("DASHBOARD_USERNAME")
         password = os.getenv("DASHBOARD_PASSWORD")
         
+        # Fall back to Streamlit secrets if available (Streamlit Cloud)
+        if not username or not password:
+            try:
+                if hasattr(st, "secrets"):
+                    username = username or st.secrets.get("DASHBOARD_USERNAME")
+                    password = password or st.secrets.get("DASHBOARD_PASSWORD")
+            except (RuntimeError, AttributeError, KeyError):
+                pass
+        
         if not username or not password:
             raise ValueError(
-                "DASHBOARD_USERNAME and DASHBOARD_PASSWORD must be set in environment variables. "
-                "Please check your .env file."
+                "DASHBOARD_USERNAME and DASHBOARD_PASSWORD must be set in environment variables or Streamlit secrets. "
+                "Please check your .env file or Streamlit Cloud secrets."
             )
         
         return {
