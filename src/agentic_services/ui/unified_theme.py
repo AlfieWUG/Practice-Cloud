@@ -393,6 +393,53 @@ def apply_unified_theme():
     .streamlit-expanderHeader:hover {
         border-color: var(--nagarro-green) !important;
     }
+    
+    /* ============================================
+       NAVIGATION SPECIFIC STYLING
+       ============================================ */
+    /* Top navigation stack (Home, All Agents, etc.) */
+    div[data-testid="stSidebar"] .top-nav-stack div[data-testid="stButton"] > button {
+        border-radius: 10px !important;
+        background: #111d2c !important;
+        border: 1px solid #27394d !important;
+        color: #f4f6fb !important;
+        font-size: 0.9rem !important;
+        padding-top: 0.4rem !important;
+        padding-bottom: 0.4rem !important;
+        transition: all 0.15s ease !important;
+        width: 100% !important;
+        margin: 0.25rem 0 !important;
+    }
+    
+    div[data-testid="stSidebar"] .top-nav-stack div[data-testid="stButton"] > button:hover {
+        border-color: #4fd1c5 !important;
+        color: #4fd1c5 !important;
+        background: #1a2a3a !important;
+    }
+    
+    /* Quick Actions section */
+    div[data-testid="stSidebar"] .quick-actions div[data-testid="stButton"] > button {
+        background: #1f2a3a !important;
+        border: 1px solid #2f4156 !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+        margin: 0.25rem 0 !important;
+    }
+    
+    div[data-testid="stSidebar"] .quick-actions div[data-testid="stButton"] > button:hover {
+        background: #2a3a4a !important;
+        border-color: var(--nagarro-green) !important;
+    }
+    
+    /* Section header styling in sidebar */
+    div[data-testid="stSidebar"] .section-header {
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        color: var(--nagarro-green) !important;
+        margin: 1rem 0 0.5rem 0 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
     </style>
     
     <script>

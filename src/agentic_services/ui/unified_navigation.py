@@ -2,10 +2,9 @@
 Unified Navigation Component - Used by ALL Pages
 Consistent sidebar navigation with Nagarro branding
 """
-import streamlit as st
-import os
 import base64
-import sys
+import os
+import streamlit as st
 
 def get_logo_base64():
     """Load Nagarro logo as base64 for embedding"""
@@ -26,9 +25,55 @@ def render_unified_sidebar():
     - Monitoring (Analytics, Reports)
     """
     
-    # Get current page from session state or query params
-    current_page = st.session_state.get('current_page', 'Home')
-    
+    # Navigation-specific CSS is now in unified_theme.py for consistency
+
+    nav_links = [
+        {"label": "Home", "page": "Home", "target": "app_streamlit.py"},
+        {"label": "All Agents", "page": "Agents", "target": "app_streamlit.py"},
+        {"label": "Agent Showcase", "page": "Agent Showcase", "target": "app_streamlit.py"},
+        {"label": "About", "page": "About", "target": "app_streamlit.py"},
+    ]
+
+    quick_actions = [
+        {"label": "Start Quick Assess", "target": "pages/10_Quick_Assess.py"},
+        {"label": "Create Project", "target": "pages/1_Onboarding.py"},
+    ]
+
+    section_config = [
+        {
+            "title": "📁 Project",
+            "expanded": True,
+            "items": [
+                {"label": "New Projects", "target": "pages/1_Onboarding.py"},
+                {"label": "Current Projects", "target": "pages/2_Projects.py"},
+            ],
+        },
+        {
+            "title": "📋 Onboarding",
+            "items": [
+                {"label": "Cloud Credentials", "target": "pages/4_Cloud_Credentials.py"},
+                {"label": "Source Infrastructure", "target": "pages/5_Source_Infrastructure.py"},
+                {"label": "Source Code", "target": "pages/6_Source_Code.py"},
+                {"label": "Target Configuration", "target": "pages/7_Target_Configuration.py"},
+            ],
+        },
+        {
+            "title": "⚡ Quick Assess",
+            "items": [
+                {"label": "Quick Assess", "target": "pages/10_Quick_Assess.py"},
+            ],
+        },
+        {
+            "title": "📊 Monitoring",
+            "items": [
+                {"label": "Analytics", "target": "pages/8_Analytics.py"},
+                {"label": "Reports", "target": "pages/9_Reports.py"},
+            ],
+        },
+    ]
+
+    st.session_state.setdefault('current_page', 'Home')
+
     # Load logo
     logo_b64 = get_logo_base64()
     
@@ -52,74 +97,34 @@ def render_unified_sidebar():
             """, unsafe_allow_html=True)
         
         st.markdown("---")
-        
-        # Navigation Section
-        st.markdown('<div class="section-header">Navigation</div>', unsafe_allow_html=True)
-        
-        # Navigation buttons - always switch to main app
-        if st.button("Home", key="nav_home", use_container_width=True):
-            st.session_state.current_page = "Home"
-            st.switch_page("app_streamlit.py")
-        
-        if st.button("All Agents", key="nav_agents", use_container_width=True):
-            st.session_state.current_page = "Agents"
-            st.switch_page("app_streamlit.py")
-        
-        if st.button("About", key="nav_about", use_container_width=True):
-            st.session_state.current_page = "About"
-            st.switch_page("app_streamlit.py")
-        
-        if st.button("Agent Showcase", key="nav_demo", use_container_width=True):
-            st.session_state.current_page = "Agent Showcase"
-            st.switch_page("app_streamlit.py")
-        
+
+        with st.container():
+            st.markdown('<div class="top-nav-stack">', unsafe_allow_html=True)
+            for link in nav_links:
+                if st.button(link["label"], use_container_width=True, key=f"nav_top_{link['label']}"):
+                    st.session_state.current_page = link["page"]
+                    st.switch_page(link["target"])
+            st.markdown('</div>', unsafe_allow_html=True)
+
         st.markdown("---")
-        
-        # Project Section
-        st.markdown('<div class="section-header">📁 Project</div>', unsafe_allow_html=True)
-        
-        if st.button("New Projects", key="nav_new_projects", use_container_width=True):
-            st.switch_page("pages/1_Onboarding.py")
-        
-        if st.button("Current Projects", key="nav_current_projects", use_container_width=True):
-            st.switch_page("pages/2_Projects.py")
-        
+
+        with st.container():
+            st.markdown('<div class="section-header">Quick Actions</div>', unsafe_allow_html=True)
+            st.markdown('<div class="quick-actions">', unsafe_allow_html=True)
+            for action in quick_actions:
+                if st.button(action["label"], use_container_width=True, key=f"quick_{action['label']}"):
+                    st.switch_page(action["target"])
+            st.markdown('</div>', unsafe_allow_html=True)
+
         st.markdown("---")
-        
-        # Onboarding Section
-        st.markdown('<div class="section-header">📋 Onboarding</div>', unsafe_allow_html=True)
-        
-        if st.button("Cloud Credentials", key="nav_cloud_credentials", use_container_width=True):
-            st.switch_page("pages/4_Cloud_Credentials.py")
-        
-        if st.button("Source Infrastructure", key="nav_source_infrastructure", use_container_width=True):
-            st.switch_page("pages/5_Source_Infrastructure.py")
-        
-        if st.button("Source Code", key="nav_source_code", use_container_width=True):
-            st.switch_page("pages/6_Source_Code.py")
-        
-        if st.button("Target Configuration", key="nav_target_config", use_container_width=True):
-            st.switch_page("pages/7_Target_Configuration.py")
-        
-        st.markdown("---")
-        
-        # Quick Assess Section
-        st.markdown('<div class="section-header">⚡ Quick Assess</div>', unsafe_allow_html=True)
-        
-        if st.button("Quick Assess", key="nav_quick_assess", use_container_width=True):
-            st.switch_page("pages/10_Quick_Assess.py")
-        
-        st.markdown("---")
-        
-        # Monitoring Section
-        st.markdown('<div class="section-header">📊 Monitoring</div>', unsafe_allow_html=True)
-        
-        if st.button("Analytics", key="nav_analytics", use_container_width=True):
-            st.switch_page("pages/8_Analytics.py")
-        
-        if st.button("Reports", key="nav_reports", use_container_width=True):
-            st.switch_page("pages/9_Reports.py")
-        
+
+        for section in section_config:
+            with st.expander(section["title"], expanded=section.get("expanded", False)):
+                for item in section["items"]:
+                    key = f"nav_{section['title']}_{item['label']}".replace(" ", "_").lower()
+                    if st.button(item["label"], key=key, use_container_width=True):
+                        st.switch_page(item["target"])
+
         st.markdown("---")
         
         # System Status
