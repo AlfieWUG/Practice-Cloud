@@ -30,6 +30,51 @@ def apply_unified_theme():
         background: var(--nagarro-navy) !important;
     }
     
+    /* ============================================
+       HIDE STREAMLIT CLOUD MENU BAR
+       ============================================ */
+    /* Hide Streamlit Cloud top menu bar (Share, Write, GitHub icons) */
+    header[data-testid="stHeader"],
+    div[data-testid="stHeader"],
+    .stApp > header,
+    header[data-testid="stHeader"] > div,
+    header[data-testid="stHeader"] button,
+    header[data-testid="stHeader"] a,
+    header[data-testid="stHeader"] svg,
+    /* Hide Share button */
+    button[data-testid="baseButton-header"][aria-label*="Share"],
+    button[data-testid="baseButton-header"][aria-label*="share"],
+    /* Hide Write button */
+    button[data-testid="baseButton-header"][aria-label*="Write"],
+    button[data-testid="baseButton-header"][aria-label*="write"],
+    /* Hide GitHub/deploy buttons */
+    a[href*="github"],
+    a[href*="deploy"],
+    /* Hide the entire header container */
+    div[data-testid="stHeader"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        top: -9999px !important;
+    }
+    
+    /* Adjust main content to account for removed header */
+    .main .block-container {
+        padding-top: 2rem !important;
+    }
+    
+    /* Hide Streamlit branding/footer if present */
+    footer[data-testid="stFooter"],
+    .stApp > footer {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+    }
+    
     /* Main content area */
     .main .block-container {
         padding-top: 2rem !important;
@@ -508,9 +553,10 @@ def apply_unified_theme():
     </style>
     
     <script>
-    // Continuously hide Streamlit default navigation
+    // Continuously hide Streamlit default navigation and header
     document.addEventListener('DOMContentLoaded', function() {
         function hideDefaultNav() {
+            // Hide Streamlit default sidebar navigation
             const navElements = document.querySelectorAll('[data-testid="stSidebarNav"], [data-testid="stSidebar"] nav, [data-testid="stSidebar"] ul[data-testid="stSidebarNav"]');
             navElements.forEach(el => {
                 el.style.display = 'none';
@@ -533,10 +579,48 @@ def apply_unified_theme():
             });
         }
         
+        function hideStreamlitHeader() {
+            // Hide Streamlit Cloud header/menu bar (Share, Write, GitHub icons)
+            const headers = document.querySelectorAll('header[data-testid="stHeader"], div[data-testid="stHeader"], .stApp > header');
+            headers.forEach(el => {
+                el.style.display = 'none';
+                el.style.visibility = 'hidden';
+                el.style.height = '0';
+                el.style.overflow = 'hidden';
+                el.style.position = 'absolute';
+                el.style.top = '-9999px';
+            });
+            
+            // Hide specific buttons in header
+            const headerButtons = document.querySelectorAll('header button, header a, header[data-testid="stHeader"] button, header[data-testid="stHeader"] a');
+            headerButtons.forEach(el => {
+                const ariaLabel = el.getAttribute('aria-label') || '';
+                const href = el.getAttribute('href') || '';
+                if (ariaLabel.toLowerCase().includes('share') || 
+                    ariaLabel.toLowerCase().includes('write') || 
+                    ariaLabel.toLowerCase().includes('github') ||
+                    href.includes('github') ||
+                    href.includes('deploy')) {
+                    el.style.display = 'none';
+                    el.style.visibility = 'hidden';
+                }
+            });
+            
+            // Hide footer if present
+            const footers = document.querySelectorAll('footer[data-testid="stFooter"], .stApp > footer');
+            footers.forEach(el => {
+                el.style.display = 'none';
+                el.style.visibility = 'hidden';
+                el.style.height = '0';
+            });
+        }
+        
         hideDefaultNav();
+        hideStreamlitHeader();
         
         const observer = new MutationObserver(function(mutations) {
             hideDefaultNav();
+            hideStreamlitHeader();
         });
         
         observer.observe(document.body, {
