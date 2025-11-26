@@ -38,9 +38,14 @@ if not enable_auth_env:
 
 ENABLE_DASHBOARD_AUTH = enable_auth_env.lower() == "true"
 if ENABLE_DASHBOARD_AUTH:
-    from agentic_services.auth import DashboardAuth
-
-    DashboardAuth().require_auth()
+    try:
+        from agentic_services.auth import DashboardAuth
+        DashboardAuth().require_auth()
+    except Exception as e:
+        # If auth fails, show error but don't crash the app
+        st.error(f"Authentication error: {str(e)}")
+        st.info("Please check that DASHBOARD_USERNAME and DASHBOARD_PASSWORD are set in Streamlit Cloud secrets.")
+        st.stop()
 
 # Initialize session state
 if 'current_page' not in st.session_state:

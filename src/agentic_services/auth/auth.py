@@ -31,16 +31,22 @@ class DashboardAuth:
         if not username or not password:
             try:
                 if hasattr(st, "secrets"):
-                    username = username or st.secrets.get("DASHBOARD_USERNAME")
-                    password = password or st.secrets.get("DASHBOARD_PASSWORD")
+                    username = username or st.secrets.get("DASHBOARD_USERNAME", "")
+                    password = password or st.secrets.get("DASHBOARD_PASSWORD", "")
             except (RuntimeError, AttributeError, KeyError):
                 pass
         
         if not username or not password:
-            raise ValueError(
-                "DASHBOARD_USERNAME and DASHBOARD_PASSWORD must be set in environment variables or Streamlit secrets. "
-                "Please check your .env file or Streamlit Cloud secrets."
+            # Show a helpful error message instead of crashing
+            st.error("⚠️ Authentication Configuration Missing")
+            st.info(
+                "**DASHBOARD_USERNAME** and **DASHBOARD_PASSWORD** must be set in Streamlit Cloud secrets.\n\n"
+                "Go to: Manage app → Secrets → Add the following:\n"
+                "- `DASHBOARD_USERNAME = \"demo\"`\n"
+                "- `DASHBOARD_PASSWORD = \"your-password\"`"
             )
+            st.stop()
+            return {}  # Never reached, but satisfies type checker
         
         return {
             username: self._hash_password(password)
